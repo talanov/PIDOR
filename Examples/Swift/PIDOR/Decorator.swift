@@ -37,8 +37,17 @@ class Decorator: UIViewController {
 extension Decorator: Decoratable {
     
     func setImages(_ names:[String]) {
-        firstOption.setImage(UIImage(named: names[0]), for: .normal)
-        secondOption.setImage(UIImage(named: names[1]), for: .normal)
+        UIView.animate(withDuration: 0.25, animations: { 
+            self.firstOption.alpha = 0
+            self.secondOption.alpha = 0
+        }) { (finished) in
+            self.firstOption.setImage(UIImage(named: names[0]), for: .normal)
+            self.secondOption.setImage(UIImage(named: names[1]), for: .normal)
+            UIView.animate(withDuration: 0.25, animations: { 
+                self.firstOption.alpha = 1
+                self.secondOption.alpha = 1
+            })
+        }
     }
     
     func showResults(is pidor: Bool) {
@@ -47,7 +56,9 @@ extension Decorator: Decoratable {
             self.secondOption.alpha = 0
         }) { (completed) in
             if !pidor {
-                self.resultLabel.text = "MAMKU EBAL"
+                self.resultLabel.text = "LOH, NE PIDOR"
+            } else {
+                self.resultLabel.text = "WAY 2 GO BRUH"
             }
             
             UIView.animate(withDuration: 4) {
