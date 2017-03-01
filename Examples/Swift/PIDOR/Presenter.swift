@@ -8,44 +8,65 @@
 
 import UIKit
 
-protocol GayventHandler: class {
-    func viewDidLoad()
-    func topButtonPressed()
-    func bottomButtonPressed()
-}
-
-protocol Decoratable {
-    var handler: GayventHandler? { get set }
-    func setImages(first: UIImage, second: UIImage)
-}
-
-class Decorator: UIViewController {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var firstOption: UIButton!
-    @IBOutlet weak var secondOption: UIButton!
+class Presenter {
     
-    weak var handler: GayventHandler?
+    fileprivate let decoratable: Decoratable
+    fileprivate let interactable: Interactable
+    fileprivate let routable: Routable
+    fileprivate var questionIndex = 0
+    fileprivate var questions: [Question]?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    init(decoratable: Decoratable, interactable: Interactable, routable: Routable) {
+        self.decoratable = decoratable
+        self.interactable = interactable
+        self.routable = routable
         
-        handler?.viewDidLoad()
-    }
-    
-    @IBAction func topButtonTapped(_ sender: Any) {
-        handler?.topButtonPressed()
-    }
-    
-    @IBAction func bottomButtonPressed(_ sender: Any) {
-        handler?.bottomButtonPressed()
+        self.decoratable.handler = self
     }
 }
 
-extension Decorator: Decoratable {
+extension Presenter: GayventHandler {
     
-    func setImages(first: UIImage, second: UIImage) {
-        firstOption.setImage(first, for: .normal)
-        secondOption.setImage(second, for: .normal)
+    private func updateImages() {
+        if let questions = self.questions {
+            if questions.count > questionIndex {
+                let img1 = questions[self.questionIndex].imageNames.first!
+                let img2 = questions[self.questionIndex].imageNames.last!
+                
+                self.decoratable.setImages([img1, img2])
+            } else {
+                self.decoratable.showResults(is: interactable.getResults())
+            }
+        }
+    }
+    
+    func viewDidLoad() {
+        self.questions = self.interactable.gayQuestions()
+        if let questions = self.questions {
+            self.interactable.setObject(Pidor(questions: questions))
+        }
+        self.updateImages()
+    }
+    
+    func topButtonPressed() {
+        if self.questionIndex == 0 {
+            self.interactable.setPidorsAnswer(for:self.questionIndex)
+        } else {
+            self.interactable.setNotPidorsAnswer(for:self.questionIndex)
+        }
+        
+        self.questionIndex += 1
+        self.updateImages()
+    }
+    
+    func bottomButtonPressed() {
+        if self.questionIndex != 0 {
+            self.interactable.setPidorsAnswer(for:self.questionIndex)
+        } else {
+            self.interactable.setNotPidorsAnswer(for:self.questionIndex)
+        }
+        self.questionIndex += 1
+        self.updateImages()
     }
 }
+
