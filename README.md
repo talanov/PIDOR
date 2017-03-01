@@ -1,6 +1,7 @@
-# PIDOR
+# PIDOR 🏳️‍🌈
 The best iOS App Architecture
-https://github.com/orgs/ApplePride/projects/1
+
+[PIDOR Project](https://github.com/orgs/ApplePride/projects/1)
 
 Simple design pattern with the best iOS dev experience.
 
@@ -14,6 +15,6 @@ Simple design pattern with the best iOS dev experience.
 
 ### Visual scheme
 
-<p align="center"> 
+<p align="center">
 	<img src="visualScheme.jpg">
 </p>
