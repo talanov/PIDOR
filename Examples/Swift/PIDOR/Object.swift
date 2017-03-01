@@ -9,18 +9,27 @@
 import Foundation
 import UIKit
 
-protocol Interactable {
-    func gayQuestions() -> [Question]
+class Question {
+    
+    init(text: String? = nil, imageNames: [String]) {
+        self.text = text
+        self.imageNames = imageNames
+    }
+    
+    let text: String?
+    let imageNames: [String]
 }
 
-class Interactor: Interactable {
+class Pidor {
     
-    func gayQuestions() -> [Question] {
-        
-        let q1 = Question(images: [UIImage(named: "gyro")!, UIImage(named: "walk")!])
-        let q2 = Question(images: [UIImage(named: "ciga")!, UIImage(named: "vape")!])
-        let q3 = Question(images: [UIImage(named: "beer")!, UIImage(named: "smoothy")!])
-        
-        return [q1, q2, q3]
+    init(questions: [Question]) {
+        self.questions = questions
     }
+    
+    let questions: [Question]
+    var answers = [Bool]()
 }
+
+
+
+

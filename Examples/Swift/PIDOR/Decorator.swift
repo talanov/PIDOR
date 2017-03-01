@@ -6,47 +6,54 @@
 //  Copyright © 2017 ApplePride. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-class Presenter {
+class Decorator: UIViewController {
     
-    fileprivate let decoratable: Decoratable
-    fileprivate let interactable: Interactable
-    fileprivate let routable: Routable
-    fileprivate var questionIndex = 0
-    fileprivate var questions: [Question]?
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var firstOption: UIButton!
+    @IBOutlet weak var secondOption: UIButton!
     
-    init(decoratable: Decoratable, interactable: Interactable, routable: Routable) {
-        self.decoratable = decoratable
-        self.interactable = interactable
-        self.routable = routable
+    @IBOutlet weak var resultLabelCenter: NSLayoutConstraint!
+    weak var handler: GayventHandler?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        self.decoratable.handler = self
+        resultLabelCenter.constant = -self.view.frame.width
+        handler?.viewDidLoad()
+    }
+    
+    @IBAction func topButtonTapped(_ sender: Any) {
+        handler?.topButtonPressed()
+    }
+    
+    @IBAction func bottomButtonPressed(_ sender: Any) {
+        handler?.bottomButtonPressed()
     }
 }
 
-extension Presenter: GayventHandler {
+extension Decorator: Decoratable {
     
-    private func updateImages() {
-        
-        let img1 = questions![self.questionIndex].images.first!
-        let img2 = questions![self.questionIndex].images.last!
-        
-        self.decoratable.setImages(first: img1, second: img2)
+    func setImages(_ names:[String]) {
+        firstOption.setImage(UIImage(named: names[0]), for: .normal)
+        secondOption.setImage(UIImage(named: names[1]), for: .normal)
     }
     
-    func viewDidLoad() {
-        self.questions = self.interactable.gayQuestions()
-        self.updateImages()
-    }
-    
-    func topButtonPressed() {
-        self.questionIndex += 1
-        self.updateImages()
-    }
-    
-    func bottomButtonPressed() {
-        self.questionIndex += 1
-        self.updateImages()
+    func showResults(is pidor: Bool) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.firstOption.alpha = 0
+            self.secondOption.alpha = 0
+        }) { (completed) in
+            if !pidor {
+                self.resultLabel.text = "MAMKU EBAL"
+            }
+            
+            UIView.animate(withDuration: 4) {
+                self.resultLabelCenter.constant = self.view.frame.width
+                self.view.layoutIfNeeded()
+            }
+        }
     }
 }
