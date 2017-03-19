@@ -1,4 +1,4 @@
-# PIDOR 🏳️‍🌈
+# PIDOR
 The best iOS App Architecture
 
 [PIDOR Project](https://github.com/ApplePride/PIDOR)
