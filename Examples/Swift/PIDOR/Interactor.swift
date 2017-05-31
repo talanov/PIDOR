@@ -14,7 +14,7 @@ class Interactor: Interactable {
     
     func gayQuestions() -> [Question] {
         
-        let q1 = Question(imageNames: ["gyro", "walk"])
+        let q1 = Question(imageNames: ["walk", "gyro"])
         let q2 = Question(imageNames: ["ciga", "vape"])
         let q3 = Question(imageNames: ["beer", "smoothy"])
         
